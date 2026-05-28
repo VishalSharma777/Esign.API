@@ -1,0 +1,353 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "ESign API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/esign/create": {
+      "post": {
+        "tags": [
+          "ESign"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ESignRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ESignRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ESignRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ESignRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/esign/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/esign/health/database": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/esign/upload-pdf": {
+      "post": {
+        "tags": [
+          "Pdf"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "GetWeatherForecast",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/esign/webhook/status": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ESignRequest": {
+        "type": "object",
+        "properties": {
+          "reference_id": {
+            "type": "string",
+            "default": "C000012744000bb9112",
+            "nullable": true
+          },
+          "reference_doc_id": {
+            "type": "string",
+            "default": "C000012744000bb98a",
+            "nullable": true
+          },
+          "docket_title": {
+            "type": "string",
+            "default": "Loan Agreement",
+            "nullable": true
+          },
+          "pdf_base64": {
+            "type": "string",
+            "default": "JVBERi0xLjQKMSAwIG9iago...",
+            "nullable": true
+          },
+          "return_url": {
+            "type": "string",
+            "default": "https://yourapp.com/sign-complete",
+            "nullable": true
+          },
+          "signers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SignerRequest"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignaturePosition": {
+        "type": "object",
+        "properties": {
+          "x1": {
+            "type": "integer",
+            "format": "int32",
+            "default": 20
+          },
+          "y1": {
+            "type": "integer",
+            "format": "int32",
+            "default": 20
+          },
+          "x2": {
+            "type": "integer",
+            "format": "int32",
+            "default": 120
+          },
+          "y2": {
+            "type": "integer",
+            "format": "int32",
+            "default": 60
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignerRequest": {
+        "type": "object",
+        "properties": {
+          "signer_ref_id": {
+            "type": "string",
+            "default": "C000012744_000bb98",
+            "nullable": true
+          },
+          "signer_name": {
+            "type": "string",
+            "default": "Bhupendra",
+            "nullable": true
+          },
+          "signer_email": {
+            "type": "string",
+            "default": "bhupendra@lala.com",
+            "nullable": true
+          },
+          "signer_mobile": {
+            "type": "string",
+            "default": "9004031234",
+            "nullable": true
+          },
+          "page_number": {
+            "type": "string",
+            "default": "all"
+          },
+          "signature_position": {
+            "$ref": "#/components/schemas/SignaturePosition"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeatherForecast": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebhookRequest": {
+        "type": "object",
+        "properties": {
+          "docket_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "signed_document_base64": {
+            "type": "string",
+            "nullable": true
+          },
+          "signed_document_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "response_time_stamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "signers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebhookSignerInfo"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "WebhookSignerInfo": {
+        "type": "object",
+        "properties": {
+          "signer_ref_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "signer_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "signed_at": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

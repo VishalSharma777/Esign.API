@@ -1,0 +1,437 @@
+2026-05-25 12:03:08.265 +05:30 [ERR] [DB] ESignMasterRepository.GetAllActiveProviders FAILED null
+Npgsql.PostgresException (0x80004005): 3D000: database "e_sign_DB" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 433
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignMasterRepository.GetAllActiveProviders() in C:\Vishwa Bhau\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignMasterRepository.cs:line 36
+  Exception data:
+    Severity: FATAL
+    SqlState: 3D000
+    MessageText: database "e_sign_DB" does not exist
+    File: postinit.c
+    Line: 1016
+    Routine: InitPostgres
+2026-05-25 12:08:40.475 +05:30 [ERR] [DB] ESignMasterRepository.GetAllActiveProviders FAILED null
+Npgsql.PostgresException (0x80004005): 3D000: database "e_sign_DB" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|213_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken, Boolean isFirstAttempt)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 433
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignMasterRepository.GetAllActiveProviders() in C:\Vishwa Bhau\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignMasterRepository.cs:line 36
+  Exception data:
+    Severity: FATAL
+    SqlState: 3D000
+    MessageText: database "e_sign_DB" does not exist
+    File: postinit.c
+    Line: 1016
+    Routine: InitPostgres
+2026-05-25 16:20:31.534 +05:30 [ERR] [FALLBACK] FAILED — Provider: MockProvider | Attempt: 1 null
+System.Net.Http.HttpRequestException: No such host is known. (mock.esign.internal:443)
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|5_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendCoreAsync(HttpRequestMessage request, Context context, CancellationToken cancellationToken)
+   at Polly.CircuitBreaker.AsyncCircuitBreakerEngine.ImplementationAsync[TResult](Func`3 action, Context context, Boolean continueOnCapturedContext, ExceptionPredicates shouldHandleExceptionPredicates, ResultPredicates`1 shouldHandleResultPredicates, ICircuitController`1 breakerController, CancellationToken cancellationToken)
+   at Polly.AsyncPolicy`1.ExecuteInternalAsync(Func`3 action, Context context, Boolean continueOnCapturedContext, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendCoreAsync(HttpRequestMessage request, Context context, CancellationToken cancellationToken)
+   at Polly.Retry.AsyncRetryEngine.ImplementationAsync[TResult](Func`3 action, Context context, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Func`5 onRetryAsync, CancellationToken cancellationToken, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider, Boolean continueOnCapturedContext)
+   at Polly.AsyncPolicy`1.ExecuteInternalAsync(Func`3 action, Context context, Boolean continueOnCapturedContext, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|5_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ESign.API.Infrastructure.Providers.BaseProvider.PostAsync(String baseUrl, String endpoint, Dictionary`2 headers, Object payload, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Infrastructure\Providers\BaseProvider.cs:line 55
+   at ESign.API.Infrastructure.Providers.Implementations.SignDeskProvider.CreateESignAsync(ESignRequest request, ESignProviderConfig providerConfig, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Infrastructure\Providers\Implementations\SignDeskProvider.cs:line 161
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 78
+2026-05-25 16:20:31.628 +05:30 [ERR] [FALLBACK] FAILED — Provider: Signdesk | Attempt: 2 null
+System.Exception: [FALLBACK] Unknown provider name in DB: Signdesk
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 80
+2026-05-25 16:20:31.917 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\Vishwa Bhau\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Vishwa Bhau\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 30
+2026-05-25 16:38:59.992 +05:30 [ERR] [FALLBACK] FAILED — Provider: MockProvider | Attempt: 1 null
+System.Net.Http.HttpRequestException: No such host is known. (mock.esign.internal:443)
+ ---> System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.HttpConnectionWaiter`1.WaitForConnectionWithTelemetryAsync(HttpRequestMessage request, HttpConnectionPool pool, Boolean async, CancellationToken requestCancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|5_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendCoreAsync(HttpRequestMessage request, Context context, CancellationToken cancellationToken)
+   at Polly.CircuitBreaker.AsyncCircuitBreakerEngine.ImplementationAsync[TResult](Func`3 action, Context context, Boolean continueOnCapturedContext, ExceptionPredicates shouldHandleExceptionPredicates, ResultPredicates`1 shouldHandleResultPredicates, ICircuitController`1 breakerController, CancellationToken cancellationToken)
+   at Polly.AsyncPolicy`1.ExecuteInternalAsync(Func`3 action, Context context, Boolean continueOnCapturedContext, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendCoreAsync(HttpRequestMessage request, Context context, CancellationToken cancellationToken)
+   at Polly.Retry.AsyncRetryEngine.ImplementationAsync[TResult](Func`3 action, Context context, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Func`5 onRetryAsync, CancellationToken cancellationToken, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider, Boolean continueOnCapturedContext)
+   at Polly.AsyncPolicy`1.ExecuteInternalAsync(Func`3 action, Context context, Boolean continueOnCapturedContext, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.PolicyHttpMessageHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|5_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at ESign.API.Infrastructure.Providers.BaseProvider.PostAsync(String baseUrl, String endpoint, Dictionary`2 headers, Object payload, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Infrastructure\Providers\BaseProvider.cs:line 55
+   at ESign.API.Infrastructure.Providers.Implementations.SignDeskProvider.CreateESignAsync(ESignRequest request, ESignProviderConfig providerConfig, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Infrastructure\Providers\Implementations\SignDeskProvider.cs:line 161
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 78
+2026-05-25 16:39:00.103 +05:30 [ERR] [FALLBACK] FAILED — Provider: Signdesk | Attempt: 2 null
+System.Exception: [FALLBACK] Unknown provider name in DB: Signdesk
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 80
+2026-05-25 16:39:00.362 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\Vishwa Bhau\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\Vishwa Bhau\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Vishwa Bhau\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 30
+2026-05-26 17:12:23.119 +05:30 [ERR] [FALLBACK] FAILED — Provider: SignDeskSandbox | Attempt: 1 null
+System.Exception: [FALLBACK] Unknown provider name in DB: SignDeskSandbox
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 80
+2026-05-26 17:12:23.717 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 30
+2026-05-26 17:32:02.283 +05:30 [ERR] [FALLBACK] FAILED — Provider: SignDeskSandbox | Attempt: 1 | Error: [FALLBACK] Unknown provider name in DB: SignDeskSandbox null
+System.Exception: [FALLBACK] Unknown provider name in DB: SignDeskSandbox
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 190
+2026-05-26 17:32:02.552 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 30
+2026-05-26 17:52:59.827 +05:30 [ERR] [FALLBACK] FAILED — Provider: SignDeskSandbox | Attempt: 1 | Error: [FALLBACK] Unknown provider name in DB: SignDeskSandbox null
+System.Exception: [FALLBACK] Unknown provider name in DB: SignDeskSandbox
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 190
+2026-05-26 17:53:00.084 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 30
+2026-05-26 18:02:48.514 +05:30 [ERR] [FALLBACK] FAILED — Provider: SignDeskSandbox | Attempt: 1 | Error: [SignDesk] Provider returned non-success status: failed null
+System.Exception: [SignDesk] Provider returned non-success status: failed
+   at ESign.API.Infrastructure.Providers.Implementations.SignDeskProvider.CreateESignAsync(ESignRequest request, ESignProviderConfig providerConfig, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Infrastructure\Providers\Implementations\SignDeskProvider.cs:line 175
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 186
+2026-05-26 18:02:48.938 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\VISHAL SHARMA\Downloads\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 30
+2026-05-28 10:26:25.439 +05:30 [ERR] [FALLBACK] FAILED — Provider: SignDeskSandbox | Attempt: 1 | Error: [SignDesk] Provider returned non-success status: failed null
+System.Exception: [SignDesk] Provider returned non-success status: failed
+   at ESign.API.Infrastructure.Providers.Implementations.SignDeskProvider.CreateESignAsync(ESignRequest request, ESignProviderConfig providerConfig, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Providers\Implementations\SignDeskProvider.cs:line 175
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 186
+2026-05-28 10:26:25.764 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 21
+2026-05-28 10:27:20.644 +05:30 [ERR] [FALLBACK] FAILED — Provider: SignDeskSandbox | Attempt: 1 | Error: [SignDesk] Provider returned non-success status: failed null
+System.Exception: [SignDesk] Provider returned non-success status: failed
+   at ESign.API.Infrastructure.Providers.Implementations.SignDeskProvider.CreateESignAsync(ESignRequest request, ESignProviderConfig providerConfig, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Providers\Implementations\SignDeskProvider.cs:line 175
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 186
+2026-05-28 10:27:20.773 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 21
+2026-05-28 10:27:37.096 +05:30 [ERR] [FALLBACK] FAILED — Provider: SignDeskSandbox | Attempt: 1 | Error: [SignDesk] Provider returned non-success status: failed null
+System.Exception: [SignDesk] Provider returned non-success status: failed
+   at ESign.API.Infrastructure.Providers.Implementations.SignDeskProvider.CreateESignAsync(ESignRequest request, ESignProviderConfig providerConfig, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Providers\Implementations\SignDeskProvider.cs:line 175
+   at ESign.API.Application.Services.Implementations.ESignFallbackService.FallbackAsync(ESignRequest request, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignFallbackService.cs:line 186
+2026-05-28 10:27:37.305 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"PROVIDER_FAILURE","Message":"E-sign provider is unavailable. Please try again later.","Status":502}
+ESign.API.Utilities.AppException: E-sign provider is unavailable. Please try again later.
+   at ESign.API.Application.Services.Implementations.ESignService.CreateESignAsync(ESignRequest request, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\ESignService.cs:line 51
+   at ESign.API.Controllers.ESignController.CreateESign(ESignRequest request) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Controllers\ESignController.cs:line 99
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 21
+2026-05-28 10:53:21.712 +05:30 [ERR] [DB] UpdateSignedPdfPath FAILED | TransactionId: 4 null
+Npgsql.PostgresException (0x80004005): 42883: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 663
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignRepository.UpdateSignedPdfPath(Int64 transactionId, String signedPdfPath, DateTime updatedAt) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignRepository.cs:line 258
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2026-05-28 10:53:21.863 +05:30 [ERR] [EXCEPTION] Unhandled exception caught {"CorrelationId":"0083d703-5c3d-480c-8c09-af38401a2865","Path":"/api/v1/esign/webhook/status"}
+Npgsql.PostgresException (0x80004005): 42883: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 663
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignRepository.UpdateSignedPdfPath(Int64 transactionId, String signedPdfPath, DateTime updatedAt) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignRepository.cs:line 258
+   at ESign.API.Application.Services.Implementations.WebhookService.ProcessWebhookAsync(WebhookRequest webhookRequest, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\WebhookService.cs:line 254
+   at ESign.API.Controllers.WebhookController.WebhookStatus(WebhookRequest request) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Controllers\WebhookController.cs:line 86
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 21
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2026-05-28 10:53:37.631 +05:30 [ERR] [DB] UpdateSignedPdfPath FAILED | TransactionId: 4 null
+Npgsql.PostgresException (0x80004005): 42883: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 663
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignRepository.UpdateSignedPdfPath(Int64 transactionId, String signedPdfPath, DateTime updatedAt) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignRepository.cs:line 258
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2026-05-28 10:53:37.765 +05:30 [ERR] [EXCEPTION] Unhandled exception caught {"CorrelationId":"998184ff-ebce-434a-bec9-6c95d4f9233b","Path":"/api/v1/esign/webhook/status"}
+Npgsql.PostgresException (0x80004005): 42883: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 663
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignRepository.UpdateSignedPdfPath(Int64 transactionId, String signedPdfPath, DateTime updatedAt) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignRepository.cs:line 258
+   at ESign.API.Application.Services.Implementations.WebhookService.ProcessWebhookAsync(WebhookRequest webhookRequest, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\WebhookService.cs:line 254
+   at ESign.API.Controllers.WebhookController.WebhookStatus(WebhookRequest request) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Controllers\WebhookController.cs:line 86
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 21
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2026-05-28 10:54:09.963 +05:30 [ERR] [DB] UpdateSignedPdfPath FAILED | TransactionId: 4 null
+Npgsql.PostgresException (0x80004005): 42883: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 663
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignRepository.UpdateSignedPdfPath(Int64 transactionId, String signedPdfPath, DateTime updatedAt) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignRepository.cs:line 258
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2026-05-28 10:54:10.134 +05:30 [ERR] [EXCEPTION] Unhandled exception caught {"CorrelationId":"ede05c67-30d9-4493-9663-d44427a0eeb8","Path":"/api/v1/esign/webhook/status"}
+Npgsql.PostgresException (0x80004005): 42883: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 663
+   at ESign.API.Infrastructure.Repositories.Implementations.ESignRepository.UpdateSignedPdfPath(Int64 transactionId, String signedPdfPath, DateTime updatedAt) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Infrastructure\Repositories\Implementations\ESignRepository.cs:line 258
+   at ESign.API.Application.Services.Implementations.WebhookService.ProcessWebhookAsync(WebhookRequest webhookRequest, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\WebhookService.cs:line 254
+   at ESign.API.Controllers.WebhookController.WebhookStatus(WebhookRequest request) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Controllers\WebhookController.cs:line 86
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 21
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure usp_update_esign_signed_pdf_path(bigint, text, timestamp with time zone) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2026-05-28 11:43:29.864 +05:30 [ERR] [EXCEPTION] AppException caught {"Code":"WEBHOOK_DUPLICATE","Message":"This webhook event has already been processed.","Status":409}
+ESign.API.Utilities.AppException: This webhook event has already been processed.
+   at ESign.API.Application.Services.Implementations.WebhookService.ProcessWebhookAsync(WebhookRequest webhookRequest, String correlationId) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Application\Services\Implementations\WebhookService.cs:line 195
+   at ESign.API.Controllers.WebhookController.WebhookStatus(WebhookRequest request) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Controllers\WebhookController.cs:line 86
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at ESign.API.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\ALL MICROSERVICES\ESign.API\ESign.API\ESign.API\Middleware\GlobalExceptionMiddleware.cs:line 21

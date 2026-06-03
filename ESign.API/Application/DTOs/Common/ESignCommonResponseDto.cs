@@ -10,11 +10,7 @@
 
 		public string? DocketId { get; set; }
 		public string? DocumentId { get; set; }
-
-
 		public List<ESignSignerLinkDto> SignerLinks { get; set; } = new();
-
-
 		public bool IsSuccess { get; set; }
 		public string? ErrorMessage { get; set; }
 	}

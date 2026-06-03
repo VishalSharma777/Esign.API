@@ -18,7 +18,7 @@ public class ESignController : ControllerBase
 		_eSignService = eSignService;
 	}
 
-	
+	// POST /api/v1/esign/create
 	[HttpPost("create")]
 	public async Task<IActionResult> CreateESign([FromBody] ESignRequest request)
 	{
@@ -26,12 +26,9 @@ public class ESignController : ControllerBase
 
 		SafeLogger.App($"[CONTROLLER] POST /api/v1/esign/create | CorrelationId: {correlationId}");
 
-
-		if (!ValidationHelper.IsValidReferenceId(request.ReferenceId))
-			return BadRequest(ResponseBuilder.InvalidRequest("reference_id is required.", correlationId));
-
-		if (string.IsNullOrWhiteSpace(request.ReferenceDocId))
-			return BadRequest(ResponseBuilder.InvalidRequest("reference_doc_id is required.", correlationId));
+		// ── Validate required fields ──────────────────────────────────────────
+		// reference_id and reference_doc_id are OPTIONAL — auto-generated if absent
+		// signer_ref_id is NOT validated — always auto-generated in ESignService
 
 		if (string.IsNullOrWhiteSpace(request.DocketTitle))
 			return BadRequest(ResponseBuilder.InvalidRequest("docket_title is required.", correlationId));
@@ -50,18 +47,21 @@ public class ESignController : ControllerBase
 			var signer = request.Signers[i];
 			var num = i + 1;
 
-		
-			if (string.IsNullOrWhiteSpace(signer.SignerRefId))
-				return BadRequest(ResponseBuilder.InvalidRequest($"signer {num}: signer_ref_id is required.", correlationId));
-
+			// signer_name is required
 			if (string.IsNullOrWhiteSpace(signer.SignerName))
 				return BadRequest(ResponseBuilder.InvalidRequest($"signer {num}: signer_name is required.", correlationId));
 
+			// signer_mobile must be a valid 10-digit Indian number
 			if (!ValidationHelper.IsValidMobile(signer.SignerMobile))
-				return BadRequest(ResponseBuilder.InvalidRequest($"signer {num}: signer_mobile must be a valid 10-digit Indian mobile number.", correlationId));
+				return BadRequest(ResponseBuilder.InvalidRequest(
+					$"signer {num}: signer_mobile must be a valid 10-digit Indian mobile number.", correlationId));
 
+			// signer_email is required and must be valid
 			if (!ValidationHelper.IsValidEmail(signer.SignerEmail))
-				return BadRequest(ResponseBuilder.InvalidRequest($"signer {num}: signer_email is invalid.", correlationId));
+				return BadRequest(ResponseBuilder.InvalidRequest(
+					$"signer {num}: signer_email is invalid.", correlationId));
+
+			// NOTE: signer_ref_id is NOT validated here — ESignService auto-generates it
 		}
 
 		// ── Call service ──────────────────────────────────────────────────────
@@ -73,13 +73,12 @@ public class ESignController : ControllerBase
 		// ── Build success response ────────────────────────────────────────────
 		var signerLinks = result.SignerLinks.Select(sl =>
 		{
-			// Find the original signer in the request by matching signer_ref_id
 			var matchedSigner = request.Signers
 				.FirstOrDefault(s => s.SignerRefId == sl.SignerRefId);
 
 			return new SignerLinkDto
 			{
-				SignerRefId = sl.SignerRefId,
+				SignerRefId = sl.SignerRefId,           // auto-generated ID echoed back
 				SignerName = matchedSigner?.SignerName,
 				InvitationLink = sl.InvitationLink
 			};

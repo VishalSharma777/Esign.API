@@ -97,45 +97,6 @@
         }
       }
     },
-    "/WeatherForecast": {
-      "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
-        "operationId": "GetWeatherForecast",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/esign/webhook/status": {
       "post": {
         "tags": [
@@ -180,12 +141,12 @@
         "properties": {
           "reference_id": {
             "type": "string",
-            "default": "C000012744000bb9112",
+            "default": null,
             "nullable": true
           },
           "reference_doc_id": {
             "type": "string",
-            "default": "C000012744000bb98a",
+            "default": null,
             "nullable": true
           },
           "docket_title": {
@@ -243,7 +204,7 @@
         "properties": {
           "signer_ref_id": {
             "type": "string",
-            "default": "C000012744_000bb98",
+            "default": null,
             "nullable": true
           },
           "signer_name": {
@@ -267,29 +228,6 @@
           },
           "signature_position": {
             "$ref": "#/components/schemas/SignaturePosition"
-          }
-        },
-        "additionalProperties": false
-      },
-      "WeatherForecast": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "summary": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

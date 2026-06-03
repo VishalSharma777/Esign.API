@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\ALL MICROSERVICES\\ESign.API\\ESign.API\\ESign.API\\ESign.API.csproj": {}
+    "C:\\ALL MICROSERVICES\\New EsignApi\\ESign.API\\ESign.API.csproj": {}
   },
   "projects": {
-    "C:\\ALL MICROSERVICES\\ESign.API\\ESign.API\\ESign.API\\ESign.API.csproj": {
+    "C:\\ALL MICROSERVICES\\New EsignApi\\ESign.API\\ESign.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ALL MICROSERVICES\\ESign.API\\ESign.API\\ESign.API\\ESign.API.csproj",
+        "projectUniqueName": "C:\\ALL MICROSERVICES\\New EsignApi\\ESign.API\\ESign.API.csproj",
         "projectName": "ESign.API",
-        "projectPath": "C:\\ALL MICROSERVICES\\ESign.API\\ESign.API\\ESign.API\\ESign.API.csproj",
+        "projectPath": "C:\\ALL MICROSERVICES\\New EsignApi\\ESign.API\\ESign.API.csproj",
         "packagesPath": "C:\\Users\\vishal.sharma\\.nuget\\packages\\",
-        "outputPath": "C:\\ALL MICROSERVICES\\ESign.API\\ESign.API\\ESign.API\\obj\\",
+        "outputPath": "C:\\ALL MICROSERVICES\\New EsignApi\\ESign.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

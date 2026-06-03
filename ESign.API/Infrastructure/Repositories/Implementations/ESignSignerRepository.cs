@@ -3,27 +3,40 @@ using ESign.API.Infrastructure.Dapper;
 using ESign.API.Infrastructure.Entities;
 using ESign.API.Infrastructure.Logging;
 using ESign.API.Infrastructure.Repositories.Interfaces;
+using ESign.API.Utilities;
 
 namespace ESign.API.Infrastructure.Repositories.Implementations;
 
-// ESignSignerRepository handles all DB operations on the esign_signers table
-// All calls go through stored procedures — no raw SQL in app code
-// Registered as Scoped in Program.cs — new instance per HTTP request
+/// <summary>
+/// ESignSignerRepository — all DB operations on esign_signers table.
+///
+/// PII ENCRYPTION RULE (enforced here, at the DB boundary):
+///   WRITE  → EncryptSigner() before every INSERT
+///   READ   → DecryptSigner() after every SELECT
+///
+/// This keeps plaintext PII only in application memory, never on disk.
+/// The rest of the codebase (services, controllers) always works with plaintext.
+/// </summary>
 public class ESignSignerRepository : IESignSignerRepository
 {
 	private readonly DapperContext _context;
+	private readonly PiiEncryptionService _pii;
 
-	public ESignSignerRepository(DapperContext context)
+	public ESignSignerRepository(DapperContext context, PiiEncryptionService pii)
 	{
 		_context = context;
+		_pii = pii;
 	}
 
-	// InsertSigner — calls usp_insert_esign_signer() stored procedure
-	// Called twice after InsertTransaction — once for each signer
-	// signer.TransactionId links this signer row back to the parent transaction
+	// ── InsertSigner ─────────────────────────────────────────────────────────
+	// Encrypts PII fields before calling the stored procedure.
+	// Called twice after every transaction insert (once per signer).
 	public async Task InsertSigner(ESignSigner signer)
 	{
 		SafeLogger.App($"[DB] InsertSigner START | SignerRefId: {signer.SignerRefId}");
+
+		// ── Encrypt PII before writing to DB ─────────────────────────────────
+		var encrypted = _pii.EncryptSigner(signer);
 
 		var sql = @"CALL usp_insert_esign_signer(
             @TransactionId,
@@ -44,21 +57,20 @@ public class ESignSignerRepository : IESignSignerRepository
 
 		try
 		{
-			// ExecuteAsync for INSERT with no return value (procedure uses CALL not SELECT)
 			await db.ExecuteAsync(sql, new
 			{
-				signer.TransactionId,
-				signer.SignerRefId,
-				signer.SignerId,
-				signer.SignerName,
-				signer.SignerEmail,
-				signer.SignerMobile,
-				signer.SignerStatus,
-				signer.InvitationLink,
-				signer.PageNumber,
-				signer.PositionX,
-				signer.PositionY,
-				signer.CreatedAt
+				encrypted.TransactionId,
+				encrypted.SignerRefId,
+				encrypted.SignerId,
+				encrypted.SignerName,       // encrypted
+				encrypted.SignerEmail,      // encrypted
+				encrypted.SignerMobile,     // encrypted
+				encrypted.SignerStatus,
+				encrypted.InvitationLink,   // encrypted
+				encrypted.PageNumber,
+				encrypted.PositionX,
+				encrypted.PositionY,
+				encrypted.CreatedAt
 			});
 
 			SafeLogger.App($"[DB] InsertSigner SUCCESS | SignerRefId: {signer.SignerRefId}");
@@ -70,9 +82,9 @@ public class ESignSignerRepository : IESignSignerRepository
 		}
 	}
 
-	// GetSignersByTransactionId — calls usp_get_esign_signers_by_transaction_id()
-	// Returns both signer rows for a given transaction
-	// Called in webhook handler to check if ALL signers have now signed
+	// ── GetSignersByTransactionId ─────────────────────────────────────────────
+	// Decrypts PII fields after reading from DB.
+	// Returns plaintext signers to the caller (WebhookService).
 	public async Task<List<ESignSigner>> GetSignersByTransactionId(long transactionId)
 	{
 		SafeLogger.App($"[DB] GetSignersByTransactionId START | TransactionId: {transactionId}");
@@ -81,14 +93,17 @@ public class ESignSignerRepository : IESignSignerRepository
 
 		try
 		{
-			var result = (await db.QueryAsync<ESignSigner>(
+			var rows = (await db.QueryAsync<ESignSigner>(
 				"SELECT * FROM usp_get_esign_signers_by_transaction_id(@p_transaction_id)",
 				new { p_transaction_id = transactionId }
 			)).ToList();
 
-			SafeLogger.App($"[DB] GetSignersByTransactionId SUCCESS | Count: {result.Count}");
+			// ── Decrypt PII after reading from DB ─────────────────────────────
+			var decrypted = rows.Select(_pii.DecryptSigner).ToList();
 
-			return result;
+			SafeLogger.App($"[DB] GetSignersByTransactionId SUCCESS | Count: {decrypted.Count}");
+
+			return decrypted;
 		}
 		catch (Exception ex)
 		{
@@ -97,10 +112,11 @@ public class ESignSignerRepository : IESignSignerRepository
 		}
 	}
 
-	// UpdateSignerStatus — calls usp_update_esign_signer_status() stored procedure
-	// Marks a signer as SIGNED and records when they signed
-	// Called once per signer in the webhook signers list
-	public async Task UpdateSignerStatus(string signerRefId, string status, DateTime signedAt, DateTime updatedAt)
+	// ── UpdateSignerStatus ───────────────────────────────────────────────────
+	// No PII written here — only status and timestamps are updated.
+	// signer_ref_id is our own internal ID (not PII), used as the lookup key.
+	public async Task UpdateSignerStatus(
+		string signerRefId, string status, DateTime signedAt, DateTime updatedAt)
 	{
 		SafeLogger.App($"[DB] UpdateSignerStatus START | SignerRefId: {signerRefId} | Status: {status}");
 

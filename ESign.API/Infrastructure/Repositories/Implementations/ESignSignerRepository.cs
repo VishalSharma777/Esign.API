@@ -7,16 +7,7 @@ using ESign.API.Utilities;
 
 namespace ESign.API.Infrastructure.Repositories.Implementations;
 
-/// <summary>
-/// ESignSignerRepository — all DB operations on esign_signers table.
-///
-/// PII ENCRYPTION RULE (enforced here, at the DB boundary):
-///   WRITE  → EncryptSigner() before every INSERT
-///   READ   → DecryptSigner() after every SELECT
-///
-/// This keeps plaintext PII only in application memory, never on disk.
-/// The rest of the codebase (services, controllers) always works with plaintext.
-/// </summary>
+
 public class ESignSignerRepository : IESignSignerRepository
 {
 	private readonly DapperContext _context;
@@ -28,9 +19,7 @@ public class ESignSignerRepository : IESignSignerRepository
 		_pii = pii;
 	}
 
-	// ── InsertSigner ─────────────────────────────────────────────────────────
-	// Encrypts PII fields before calling the stored procedure.
-	// Called twice after every transaction insert (once per signer).
+	
 	public async Task InsertSigner(ESignSigner signer)
 	{
 		SafeLogger.App($"[DB] InsertSigner START | SignerRefId: {signer.SignerRefId}");
@@ -83,8 +72,6 @@ public class ESignSignerRepository : IESignSignerRepository
 	}
 
 	// ── GetSignersByTransactionId ─────────────────────────────────────────────
-	// Decrypts PII fields after reading from DB.
-	// Returns plaintext signers to the caller (WebhookService).
 	public async Task<List<ESignSigner>> GetSignersByTransactionId(long transactionId)
 	{
 		SafeLogger.App($"[DB] GetSignersByTransactionId START | TransactionId: {transactionId}");
@@ -113,8 +100,6 @@ public class ESignSignerRepository : IESignSignerRepository
 	}
 
 	// ── UpdateSignerStatus ───────────────────────────────────────────────────
-	// No PII written here — only status and timestamps are updated.
-	// signer_ref_id is our own internal ID (not PII), used as the lookup key.
 	public async Task UpdateSignerStatus(
 		string signerRefId, string status, DateTime signedAt, DateTime updatedAt)
 	{

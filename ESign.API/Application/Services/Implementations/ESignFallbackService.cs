@@ -1,85 +1,180 @@
-﻿using ESign.API.Application.DTOs.Common;
+﻿//using ESign.API.Application.DTOs.Common;
+//using ESign.API.Application.DTOs.Request;
+//using ESign.API.Application.Services.Interfaces;
+//using ESign.API.Infrastructure.Entities;
+//using ESign.API.Infrastructure.Logging;
+//using ESign.API.Infrastructure.Providers.Interfaces;
+//using ESign.API.Infrastructure.Repositories.Interfaces;
+
+//namespace ESign.API.Application.Services.Implementations
+//{
+
+
+//    public class ESignFallbackService : IESignFallbackService
+//    {
+//        private readonly ISignDeskService _SignDeskService;
+//        private readonly IESignMasterRepository _masterRepository;
+//        private readonly IESignCacheService _cacheService;
+
+//        public ESignFallbackService(
+//            ISignDeskService SignDeskService,
+//            IESignMasterRepository masterRepository,
+//            IESignCacheService cacheService)
+//        {
+//            _SignDeskService = SignDeskService;
+//            _masterRepository = masterRepository;
+//            _cacheService = cacheService;
+//        }
+
+
+//        public async Task<(bool success, ESignCommonResponseDto? response, string providerName)> FallbackAsync(
+//            ESignRequest request,
+//            string correlationId)
+//        {
+//            var providers = _cacheService.GetProviders();
+
+//            if (!providers.Any())
+//            {
+//                SafeLogger.App("[FALLBACK] Cache empty — loading providers from DB");
+//                providers = await _masterRepository.GetAllActiveProviders();
+//                _cacheService.SetProviders(providers);
+//            }
+
+//            var ordered = providers
+//                .Where(p => p.IsActive)
+//                .OrderBy(p => p.Priority)
+//                .ToList();
+
+//            SafeLogger.App($"[FALLBACK] {ordered.Count} active providers to try | CorrelationId: {correlationId}");
+
+//            var attemptNumber = 0;
+
+//            foreach (var provider in ordered)
+//            {
+//                attemptNumber++;
+//                try
+//                {
+//                    SafeLogger.App($"[FALLBACK] Trying provider: {provider.ProviderName} | Attempt: {attemptNumber}");
+
+//                    var (response, _) = provider.ProviderName.ToLower() switch
+//                    {
+//                        "signdesksandbox" => await _SignDeskService.CreateESignAsync(request, provider, correlationId),
+//                        "mockprovider" => await _SignDeskService.CreateESignAsync(request, provider, correlationId),  // Mock uses same interface for now
+//                        _ => throw new Exception($"[FALLBACK] Unknown provider name in DB: {provider.ProviderName}")
+//                    };
+
+//                    response.ProviderName = provider.ProviderName;
+//                    response.ProviderId = provider.Id;
+
+//                    SafeLogger.App($"[FALLBACK] SUCCESS — Provider: {provider.ProviderName} | DocketId: {response.DocketId}");
+
+//                    return (true, response, provider.ProviderName);
+//                }
+//                catch (Exception ex)
+//                {
+
+//                    SafeLogger.Error(ex, $"[FALLBACK] FAILED — Provider: {provider.ProviderName} | Attempt: {attemptNumber} | Error: {ex.Message}");
+//                }
+//            }
+
+
+//            SafeLogger.App("[FALLBACK] All providers exhausted — returning failure");
+//            return (false, null, "NONE");
+//        }
+//    }
+//}
+
+
+
+
+
+
+
+
+
+using ESign.API.Application.DTOs.Common;
 using ESign.API.Application.DTOs.Request;
 using ESign.API.Application.Services.Interfaces;
-using ESign.API.Infrastructure.Entities;
 using ESign.API.Infrastructure.Logging;
 using ESign.API.Infrastructure.Providers.Interfaces;
 using ESign.API.Infrastructure.Repositories.Interfaces;
 
-namespace ESign.API.Application.Services.Implementations
+namespace ESign.API.Application.Services.Implementations;
+
+public class ESignFallbackService : IESignFallbackService
 {
+	private readonly ISignDeskService _signDeskService;
+	private readonly IMockProviderService _mockProviderService;
+	private readonly IESignMasterRepository _masterRepository;
+	private readonly IESignCacheService _cacheService;
 
+	public ESignFallbackService(
+		ISignDeskService signDeskService,
+		IMockProviderService mockProviderService,
+		IESignMasterRepository masterRepository,
+		IESignCacheService cacheService)
+	{
+		_signDeskService = signDeskService;
+		_mockProviderService = mockProviderService;
+		_masterRepository = masterRepository;
+		_cacheService = cacheService;
+	}
 
-    public class ESignFallbackService : IESignFallbackService
-    {
-        private readonly ISignDeskService _SignDeskService;
-        private readonly IESignMasterRepository _masterRepository;
-        private readonly IESignCacheService _cacheService;
+	public async Task<(bool success, ESignCommonResponseDto? response, string providerName)> FallbackAsync(
+		ESignRequest request,
+		string correlationId)
+	{
+		// ── Step 1: Load providers from cache ────────────────────────────────
+		var providers = _cacheService.GetProviders();
 
-        public ESignFallbackService(
-            ISignDeskService SignDeskService,
-            IESignMasterRepository masterRepository,
-            IESignCacheService cacheService)
-        {
-            _SignDeskService = SignDeskService;
-            _masterRepository = masterRepository;
-            _cacheService = cacheService;
-        }
+		if (!providers.Any())
+		{
+			SafeLogger.App("[FALLBACK] Cache empty — loading from DB");
+			providers = await _masterRepository.GetAllActiveProviders();
+			_cacheService.SetProviders(providers);
+		}
 
+	
+		var ordered = providers
+			.Where(p => p.IsActive)
+			.OrderBy(p => p.Priority)
+			.ToList();
 
-        public async Task<(bool success, ESignCommonResponseDto? response, string providerName)> FallbackAsync(
-            ESignRequest request,
-            string correlationId)
-        {
-            var providers = _cacheService.GetProviders();
+		SafeLogger.App($"[FALLBACK] {ordered.Count} active provider(s) | CorrelationId: {correlationId}");
 
-            if (!providers.Any())
-            {
-                SafeLogger.App("[FALLBACK] Cache empty — loading providers from DB");
-                providers = await _masterRepository.GetAllActiveProviders();
-                _cacheService.SetProviders(providers);
-            }
+		for (int attempt = 0; attempt < ordered.Count; attempt++)
+		{
+			var provider = ordered[attempt];
+			SafeLogger.App($"[FALLBACK] Attempt {attempt + 1}/{ordered.Count} → Provider: {provider.ProviderName} (priority={provider.Priority})");
 
-            var ordered = providers
-                .Where(p => p.IsActive)
-                .OrderBy(p => p.Priority)
-                .ToList();
+			try
+			{
+				var (response, _) = provider.ProviderName.ToLower() switch
+				{
+					"mockprovider" => await _mockProviderService.CreateESignAsync(request, provider, correlationId),
+					"signdesksandbox" => await _signDeskService.CreateESignAsync(request, provider, correlationId),
 
-            SafeLogger.App($"[FALLBACK] {ordered.Count} active providers to try | CorrelationId: {correlationId}");
+					_ => throw new Exception($"Unknown provider name in DB: '{provider.ProviderName}'")
+				};
 
-            var attemptNumber = 0;
+				response.ProviderName = provider.ProviderName;
+				response.ProviderId = provider.Id;
 
-            foreach (var provider in ordered)
-            {
-                attemptNumber++;
-                try
-                {
-                    SafeLogger.App($"[FALLBACK] Trying provider: {provider.ProviderName} | Attempt: {attemptNumber}");
+				SafeLogger.App($"[FALLBACK] SUCCESS | Provider: {provider.ProviderName} | DocketId: {response.DocketId}");
 
-                    var (response, _) = provider.ProviderName.ToLower() switch
-                    {
-                        "signdesksandbox" => await _SignDeskService.CreateESignAsync(request, provider, correlationId),
-                        "mockprovider" => await _SignDeskService.CreateESignAsync(request, provider, correlationId),  // Mock uses same interface for now
-                        _ => throw new Exception($"[FALLBACK] Unknown provider name in DB: {provider.ProviderName}")
-                    };
+				return (true, response, provider.ProviderName);
+			}
+			catch (Exception ex)
+			{
+				SafeLogger.Error(ex,
+					$"[FALLBACK] FAILED | Provider: {provider.ProviderName} | " +
+					$"Attempt: {attempt + 1} | Reason: {ex.Message}");
 
-                    response.ProviderName = provider.ProviderName;
-                    response.ProviderId = provider.Id;
+			}
+		}
 
-                    SafeLogger.App($"[FALLBACK] SUCCESS — Provider: {provider.ProviderName} | DocketId: {response.DocketId}");
-
-                    return (true, response, provider.ProviderName);
-                }
-                catch (Exception ex)
-                {
-
-                    SafeLogger.Error(ex, $"[FALLBACK] FAILED — Provider: {provider.ProviderName} | Attempt: {attemptNumber} | Error: {ex.Message}");
-                }
-            }
-
-
-            SafeLogger.App("[FALLBACK] All providers exhausted — returning failure");
-            return (false, null, "NONE");
-        }
-    }
+		// ── All providers exhausted ───────────────────────────────────────────
+		SafeLogger.App("[FALLBACK] All providers exhausted — returning failure");
+		return (false, null, "NONE");
+	}
 }

@@ -16,7 +16,7 @@ using ESign.API.Utilities;
 // ── STEP 1: Configure Serilog before anything else ───────────────────────────
 LoggerConfig.ConfigureLogger();
 
-// ── STEP 2: Enable Dapper snake_case → PascalCase mapping ────────────────────
+// ── STEP 2: Enable Dapper snake_case → PascalCase column mapping ─────────────
 DefaultTypeMap.MatchNamesWithUnderscores = true;
 
 try
@@ -26,11 +26,11 @@ try
 	// ── STEP 3: Wire up Serilog ───────────────────────────────────────────────
 	builder.Host.UseSerilog();
 
-	// ── STEP 4: Register Controllers with Newtonsoft.Json ────────────────────
+	// ── STEP 4: Controllers + Newtonsoft.Json ─────────────────────────────────
 	builder.Services.AddControllers()
 		.AddNewtonsoftJson(options => { });
 
-	// ── STEP 5: Register Swagger / OpenAPI ───────────────────────────────────
+	// ── STEP 5: Swagger ───────────────────────────────────────────────────────
 	builder.Services.AddEndpointsApiExplorer();
 	builder.Services.AddSwaggerGen(c =>
 	{
@@ -39,52 +39,56 @@ try
 	});
 	builder.Services.AddSwaggerGenNewtonsoftSupport();
 
-	// ── STEP 6: Register IMemoryCache ─────────────────────────────────────────
+	// ── STEP 6: Memory cache ──────────────────────────────────────────────────
 	builder.Services.AddMemoryCache();
 
-	// ── STEP 7: Register DapperContext as Singleton ───────────────────────────
+	// ── STEP 7: Infrastructure — Dapper + Encryption ─────────────────────────
 	builder.Services.AddSingleton<DapperContext>();
-
-	// ── STEP 8: Register EncryptionService as Singleton ──────────────────────
-	// Reads AES Key/IV from appsettings.json once at startup
 	builder.Services.AddSingleton<EncryptionService>();
-
-	// ── STEP 8b: Register PiiEncryptionService as Singleton ──────────────────
-	// Wraps EncryptionService with entity-level PII encrypt/decrypt helpers.
-	// Singleton is safe — no mutable state, depends only on EncryptionService (also Singleton).
-	// Used by ESignSignerRepository to encrypt PII on write and decrypt on read.
 	builder.Services.AddSingleton<PiiEncryptionService>();
 
-	// ── STEP 9: Register named HttpClient with Polly policies ────────────────
+	// ── STEP 8: HTTP clients ──────────────────────────────────────────────────
+
+	// ADD this — separate named client for MockProvider
+	// MockProvider uses this client (pointing at localhost:5001 which is dead)
+	// Polly fires on the HttpClient failures, not on C# exceptions
+	builder.Services.AddHttpClient("MockProviderClient")
+		.AddPolicyHandler(PollyPolicies.GetRetryPolicy("MockProvider"))        // retries 2x
+		.AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("MockProvider")); // breaks after 3 fails
+																				  // SignDeskClient — real provider with Polly retry + circuit breaker
 	builder.Services.AddHttpClient("SignDeskClient")
 		.AddPolicyHandler(PollyPolicies.GetRetryPolicy("SignDeskSandbox"))
 		.AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("SignDeskSandbox"));
 
-	// ── STEP 10: Register Repositories (Scoped) ───────────────────────────────
+	// ── STEP 9: Repositories ──────────────────────────────────────────────────
 	builder.Services.AddScoped<IESignMasterRepository, ESignMasterRepository>();
 	builder.Services.AddScoped<IESignRepository, ESignRepository>();
 	builder.Services.AddScoped<IESignSignerRepository, ESignSignerRepository>();
 	builder.Services.AddScoped<IHealthRepository, HealthRepository>();
 
-	// ── STEP 11: Register Provider (Scoped) ───────────────────────────────────
+	// ── STEP 10: Providers ────────────────────────────────────────────────────
+	// ISignDeskService → real HTTP provider
 	builder.Services.AddScoped<ISignDeskService, SignDeskProvider>();
 
-	// ── STEP 12: Register Cache Service (Singleton) ───────────────────────────
+	// IMockProviderService → always throws to prove fallback priority chain
+	// No HTTP client needed — MockProvider throws in code, no network call
+	builder.Services.AddScoped<IMockProviderService, MockProvider>();
+
+	// ── STEP 11: Cache service ────────────────────────────────────────────────
 	builder.Services.AddSingleton<IESignCacheService, ESignCacheService>();
 
-	// ── STEP 13: Register Application Services (Scoped) ───────────────────────
+	// ── STEP 12: Application services ────────────────────────────────────────
+	// ESignFallbackService now injects both ISignDeskService + IMockProviderService
 	builder.Services.AddScoped<IESignFallbackService, ESignFallbackService>();
 	builder.Services.AddScoped<IESignService, ESignService>();
 	builder.Services.AddScoped<IWebhookService, WebhookService>();
 	builder.Services.AddScoped<IHealthService, HealthService>();
-
-	// ── STEP 14: Register PdfStorageService ───────────────────────────────────
 	builder.Services.AddScoped<IPdfStorageService, PdfStorageService>();
 
-	// ── STEP 15: Register CacheWarmupService as Hosted Service ────────────────
+	// ── STEP 13: Hosted services ──────────────────────────────────────────────
 	builder.Services.AddHostedService<CacheWarmupService>();
 
-	// ── BUILD THE APP ──────────────────────────────────────────────────────────
+	// ── BUILD ─────────────────────────────────────────────────────────────────
 	var app = builder.Build();
 
 	if (app.Environment.IsDevelopment())
@@ -97,7 +101,7 @@ try
 	app.UseMiddleware<GlobalExceptionMiddleware>();
 	app.MapControllers();
 
-	Log.Information("[STARTUP] ESign.API starting up");
+	Log.Information("[STARTUP] ESign.API starting");
 	app.Run();
 }
 catch (Exception ex)

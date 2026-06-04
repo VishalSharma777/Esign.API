@@ -18,17 +18,12 @@ public class ESignController : ControllerBase
 		_eSignService = eSignService;
 	}
 
-	// POST /api/v1/esign/create
 	[HttpPost("create")]
 	public async Task<IActionResult> CreateESign([FromBody] ESignRequest request)
 	{
 		var correlationId = HttpContext.Items["CorrelationId"]?.ToString() ?? Guid.NewGuid().ToString();
 
 		SafeLogger.App($"[CONTROLLER] POST /api/v1/esign/create | CorrelationId: {correlationId}");
-
-		// ── Validate required fields ──────────────────────────────────────────
-		// reference_id and reference_doc_id are OPTIONAL — auto-generated if absent
-		// signer_ref_id is NOT validated — always auto-generated in ESignService
 
 		if (string.IsNullOrWhiteSpace(request.DocketTitle))
 			return BadRequest(ResponseBuilder.InvalidRequest("docket_title is required.", correlationId));
@@ -60,8 +55,6 @@ public class ESignController : ControllerBase
 			if (!ValidationHelper.IsValidEmail(signer.SignerEmail))
 				return BadRequest(ResponseBuilder.InvalidRequest(
 					$"signer {num}: signer_email is invalid.", correlationId));
-
-			// NOTE: signer_ref_id is NOT validated here — ESignService auto-generates it
 		}
 
 		// ── Call service ──────────────────────────────────────────────────────

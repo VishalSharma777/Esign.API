@@ -19,7 +19,7 @@ public class PdfController : ControllerBase
 
 
 	[HttpPost("upload-pdf")]
-	[Consumes("multipart/form-data")]   // tells Swagger this is a file upload, not JSON
+	[Consumes("multipart/form-data")]   
 	public async Task<IActionResult> UploadPdf(IFormFile file)
 	{
 		var correlationId = HttpContext.Items["CorrelationId"]?.ToString() ?? Guid.NewGuid().ToString();

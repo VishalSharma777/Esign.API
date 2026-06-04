@@ -1,48 +1,49 @@
 ﻿using Newtonsoft.Json;
 
-namespace ESign.API.Application.DTOs.Request;
-
-
-public class WebhookRequest
+namespace ESign.API.Application.DTOs.Request
 {
-	
-	[JsonProperty("docket_id")]
-	public string? DocketId { get; set; }
+	public class WebhookRequest
+	{
 
-	[JsonProperty("status")]
-	public string? Status { get; set; }
+		[JsonProperty("docket_id")]
+		public string? DocketId { get; set; }
 
-	[JsonProperty("signed_document_base64")]
-	public string? SignedDocumentBase64 { get; set; }
+		[JsonProperty("status")]
+		public string? Status { get; set; }
 
-	[JsonProperty("signed_document_url")]
-	public string? SignedDocumentUrl { get; set; }
+		[JsonProperty("signed_document_base64")]
+		public string? SignedDocumentBase64 { get; set; }
 
-	[JsonProperty("response_time_stamp")]
-	public string? ResponseTimeStamp { get; set; }
+		[JsonProperty("signed_document_url")]
+		public string? SignedDocumentUrl { get; set; }
 
-	
-	[JsonProperty("signers")]
-	public List<WebhookSignerInfo> Signers { get; set; } = new();
+		[JsonProperty("response_time_stamp")]
+		public string? ResponseTimeStamp { get; set; }
 
-	// HMAC signature from X-Webhook-Signature header — validated before processing
-	[JsonIgnore]
-	public string? WebhookSignature { get; set; }
-}
 
-// WebhookSignerInfo — one signer's completion details inside the webhook payload
-public class WebhookSignerInfo
-{
-	
-	[JsonProperty("signer_ref_id")]
-	public string? SignerRefId { get; set; }
+		[JsonProperty("signers")]
+		public List<WebhookSignerInfo> Signers { get; set; } = new();
 
-	[JsonProperty("signer_id")]
-	public string? SignerId { get; set; }
+		// HMAC signature from X-Webhook-Signature header — validated before processing
+		[JsonIgnore]
+		public string? WebhookSignature { get; set; }
+	}
 
-	[JsonProperty("status")]
-	public string? Status { get; set; }
+	// WebhookSignerInfo — one signer's completion details inside the webhook payload
+	public class WebhookSignerInfo
+	{
 
-	[JsonProperty("signed_at")]
-	public string? SignedAt { get; set; }
+		[JsonProperty("signer_ref_id")]
+		public string? SignerRefId { get; set; }
+
+		[JsonProperty("signer_id")]
+		public string? SignerId { get; set; }
+
+		[JsonProperty("status")]
+		public string? Status { get; set; }
+
+		[JsonProperty("signed_at")]
+		public string? SignedAt { get; set; }
+	}
+
 }

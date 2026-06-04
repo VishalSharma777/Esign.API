@@ -1,7 +1,5 @@
 ﻿namespace ESign.API.Application.DTOs.Common
 {
-
-
 	public class ESignCommonResponseDto
 	{
 

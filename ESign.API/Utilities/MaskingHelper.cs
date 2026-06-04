@@ -12,7 +12,6 @@ public static class MaskingHelper
 	public static string MaskSensitiveData(string? input)
 	{
 		if (string.IsNullOrEmpty(input)) return string.Empty;
-
 		return MobileRegex.Replace(input, "$1XXXXXX");
 	}
 }

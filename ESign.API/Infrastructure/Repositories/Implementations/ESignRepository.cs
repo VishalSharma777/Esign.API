@@ -6,8 +6,7 @@ using ESign.API.Infrastructure.Repositories.Interfaces;
 
 namespace ESign.API.Infrastructure.Repositories.Implementations;
 
-// ESignRepository handles all DB operations on esign_transactions table
-// All calls go through stored procedures — no raw SQL in application code
+
 public class ESignRepository : IESignRepository
 {
 	private readonly DapperContext _context;
@@ -17,8 +16,7 @@ public class ESignRepository : IESignRepository
 		_context = context;
 	}
 
-	// InsertTransaction — calls usp_insert_esign_transaction()
-	// Inserts a new row, returns the auto-generated primary key
+
 	public async Task<long> InsertTransaction(ESignTransaction transaction)
 	{
 		SafeLogger.App($"[DB] InsertTransaction START | ReferenceId: {transaction.ReferenceId}");
@@ -54,8 +52,7 @@ public class ESignRepository : IESignRepository
 		}
 	}
 
-	// GetByDocketId — calls usp_get_esign_transaction_by_docket_id()
-	// Finds a transaction by provider's docket_id (received in webhook)
+
 	public async Task<ESignTransaction?> GetByDocketId(string docketId)
 	{
 		SafeLogger.App($"[DB] GetByDocketId START | DocketId: {docketId}");
@@ -82,8 +79,7 @@ public class ESignRepository : IESignRepository
 		}
 	}
 
-	// UpdateTransactionStatus — calls usp_update_esign_transaction_status()
-	// Updates status + completed_at + updated_at when signing completes
+
 	public async Task UpdateTransactionStatus(
 		long transactionId, string status, DateTime? completedAt, DateTime updatedAt)
 	{
@@ -107,9 +103,7 @@ public class ESignRepository : IESignRepository
 		}
 	}
 
-	// UpdateSignedPdfPath — calls usp_update_esign_signed_pdf_path()
-	// Saves the relative file path of the signed PDF after it is written to disk
-	// Called from WebhookService after PdfStorageService.SaveSignedPdfAsync() returns the path
+
 	public async Task UpdateSignedPdfPath(long transactionId, string signedPdfPath, DateTime updatedAt)
 	{
 		SafeLogger.App($"[DB] UpdateSignedPdfPath START | TransactionId: {transactionId} | Path: {signedPdfPath}");

@@ -16,7 +16,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ESign.API.Controllers.HealthController",
+    "ContainingType": "ESign.API.Controllers.ESignController",
     "Method": "Health",
     "RelativePath": "api/v1/esign/health",
     "HttpMethod": "GET",
@@ -26,7 +26,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ESign.API.Controllers.HealthController",
+    "ContainingType": "ESign.API.Controllers.ESignController",
     "Method": "DatabaseHealth",
     "RelativePath": "api/v1/esign/health/database",
     "HttpMethod": "GET",

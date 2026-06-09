@@ -44,7 +44,7 @@
     "/api/v1/esign/health": {
       "get": {
         "tags": [
-          "Health"
+          "ESign"
         ],
         "responses": {
           "200": {
@@ -56,7 +56,7 @@
     "/api/v1/esign/health/database": {
       "get": {
         "tags": [
-          "Health"
+          "ESign"
         ],
         "responses": {
           "200": {

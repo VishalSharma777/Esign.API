@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ESign.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ab1281964ebf83d1eb48614428e42c67db5fa86")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2197413b6f7d88e936de266abf012e3775ac596")]
 [assembly: System.Reflection.AssemblyProductAttribute("ESign.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ESign.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

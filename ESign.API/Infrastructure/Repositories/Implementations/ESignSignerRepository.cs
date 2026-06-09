@@ -7,25 +7,33 @@ using ESign.API.Utilities;
 
 namespace ESign.API.Infrastructure.Repositories.Implementations;
 
-
 public class ESignSignerRepository : IESignSignerRepository
 {
 	private readonly DapperContext _context;
-	private readonly PiiEncryptionService _pii;
+	private readonly EncryptionService _encryption;
 
-	public ESignSignerRepository(DapperContext context, PiiEncryptionService pii)
+	public ESignSignerRepository(DapperContext context, EncryptionService encryption)
 	{
 		_context = context;
-		_pii = pii;
+		_encryption = encryption;
 	}
 
-	
+
+	private string Encrypt(string plainText) => _encryption.Encrypt(plainText);
+
+	private string? EncryptOptional(string? plainText)
+		=> string.IsNullOrEmpty(plainText) ? plainText : _encryption.Encrypt(plainText);
+
+	private string Decrypt(string cipherText) => _encryption.Decrypt(cipherText);
+
+	// Decrypt an optional PII field — returns null as-is
+	private string? DecryptOptional(string? cipherText)
+		=> string.IsNullOrEmpty(cipherText) ? cipherText : _encryption.Decrypt(cipherText);
+
+
 	public async Task InsertSigner(ESignSigner signer)
 	{
 		SafeLogger.App($"[DB] InsertSigner START | SignerRefId: {signer.SignerRefId}");
-
-		// ── Encrypt PII before writing to DB ─────────────────────────────────
-		var encrypted = _pii.EncryptSigner(signer);
 
 		var sql = @"CALL usp_insert_esign_signer(
             @TransactionId,
@@ -48,18 +56,18 @@ public class ESignSignerRepository : IESignSignerRepository
 		{
 			await db.ExecuteAsync(sql, new
 			{
-				encrypted.TransactionId,
-				encrypted.SignerRefId,
-				encrypted.SignerId,
-				encrypted.SignerName,       // encrypted
-				encrypted.SignerEmail,      // encrypted
-				encrypted.SignerMobile,     // encrypted
-				encrypted.SignerStatus,
-				encrypted.InvitationLink,   // encrypted
-				encrypted.PageNumber,
-				encrypted.PositionX,
-				encrypted.PositionY,
-				encrypted.CreatedAt
+				signer.TransactionId,
+				signer.SignerRefId,             
+				signer.SignerId,                 
+				SignerName = Encrypt(signer.SignerName),           
+				SignerEmail = EncryptOptional(signer.SignerEmail),    
+				SignerMobile = Encrypt(signer.SignerMobile),          
+				signer.SignerStatus,             
+				InvitationLink = EncryptOptional(signer.InvitationLink), 
+				signer.PageNumber,
+				signer.PositionX,
+				signer.PositionY,
+				signer.CreatedAt
 			});
 
 			SafeLogger.App($"[DB] InsertSigner SUCCESS | SignerRefId: {signer.SignerRefId}");
@@ -85,8 +93,27 @@ public class ESignSignerRepository : IESignSignerRepository
 				new { p_transaction_id = transactionId }
 			)).ToList();
 
-			// ── Decrypt PII after reading from DB ─────────────────────────────
-			var decrypted = rows.Select(_pii.DecryptSigner).ToList();
+			// Decrypt PII fields on every row before returning to the caller
+			// The rest of the app (WebhookService etc.) always sees plain text
+			var decrypted = rows.Select(s => new ESignSigner
+			{
+				Id = s.Id,
+				TransactionId = s.TransactionId,
+				SignerRefId = s.SignerRefId,
+				SignerId = s.SignerId,
+				SignerStatus = s.SignerStatus,
+				SignedAt = s.SignedAt,
+				PageNumber = s.PageNumber,
+				PositionX = s.PositionX,
+				PositionY = s.PositionY,
+				CreatedAt = s.CreatedAt,
+				UpdatedAt = s.UpdatedAt,
+
+				SignerName = Decrypt(s.SignerName),
+				SignerEmail = DecryptOptional(s.SignerEmail),
+				SignerMobile = Decrypt(s.SignerMobile),
+				InvitationLink = DecryptOptional(s.InvitationLink),
+			}).ToList();
 
 			SafeLogger.App($"[DB] GetSignersByTransactionId SUCCESS | Count: {decrypted.Count}");
 
@@ -99,7 +126,7 @@ public class ESignSignerRepository : IESignSignerRepository
 		}
 	}
 
-	// ── UpdateSignerStatus ───────────────────────────────────────────────────
+	// ── UpdateSignerStatus 
 	public async Task UpdateSignerStatus(
 		string signerRefId, string status, DateTime signedAt, DateTime updatedAt)
 	{

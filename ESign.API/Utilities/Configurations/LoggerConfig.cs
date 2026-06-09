@@ -2,7 +2,7 @@
 using Serilog.Events;
 using ESign.API.Utilities;
 
-namespace ESign.API.Configurations;
+namespace ESign.API.Utilities.Configurations;
 
 public static class LoggerConfig
 {
@@ -24,7 +24,6 @@ public static class LoggerConfig
 					buffered: false
 				)
 			)
-
 			// ── REQUEST log file ──────────────────────────────────────────
 			.WriteTo.Logger(lc => lc
 				.Filter.ByIncludingOnly(e =>
@@ -37,7 +36,6 @@ public static class LoggerConfig
 					buffered: false
 				)
 			)
-
 			// ── RESPONSE log file ─────────────────────────────────────────
 			.WriteTo.Logger(lc => lc
 				.Filter.ByIncludingOnly(e =>
@@ -50,7 +48,6 @@ public static class LoggerConfig
 					buffered: false
 				)
 			)
-
 			// ── ERROR log file ────────────────────────────────────────────
 			.WriteTo.Logger(lc => lc
 				.Filter.ByIncludingOnly(e =>

@@ -37,7 +37,7 @@ public class EncryptionService
     {
         if (string.IsNullOrEmpty(cipherText)) return string.Empty;
 
-        if (cipherText == "ENCRYPTED_KEY_HERE")
+        if (cipherText == "IYvfTd163Vl9imCSvWmzRUzeECyvAi8D")
             throw new AppException(
                 "CONFIGURATION_ERROR",
                 "Provider API key has not been set. Go to GET /api/v1/esign/health/encrypt?key=YOUR_RAW_KEY to generate the encrypted key, then run: UPDATE esign_providers SET encrypted_api_key = \'<value>\' WHERE provider_name = \'SignDeskSandbox\'",

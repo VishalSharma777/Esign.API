@@ -80,54 +80,25 @@ public class ESignRepository : IESignRepository
 	}
 
 
+
 	public async Task UpdateTransactionStatus(
-		long transactionId, string status, DateTime? completedAt, DateTime updatedAt)
+	long transactionId,
+	string status,
+	DateTime? completedAt,
+	DateTime updatedAt,
+	string? signedPdfPath = null)   // optional — pass only when PDF is present
 	{
-		SafeLogger.App($"[DB] UpdateTransactionStatus START | TransactionId: {transactionId} | Status: {status}");
-
 		using var db = _context.CreateConnection();
-
-		try
-		{
-			await db.ExecuteAsync(
-				"CALL usp_update_esign_transaction_status(@p_transaction_id, @p_status, @p_completed_at, @p_updated_at)",
-				new { p_transaction_id = transactionId, p_status = status, p_completed_at = completedAt, p_updated_at = updatedAt }
-			);
-
-			SafeLogger.App($"[DB] UpdateTransactionStatus SUCCESS | TransactionId: {transactionId}");
-		}
-		catch (Exception ex)
-		{
-			SafeLogger.Error(ex, $"[DB] UpdateTransactionStatus FAILED | TransactionId: {transactionId}");
-			throw;
-		}
-	}
-
-
-	public async Task UpdateSignedPdfPath(long transactionId, string signedPdfPath, DateTime updatedAt)
-	{
-		SafeLogger.App($"[DB] UpdateSignedPdfPath START | TransactionId: {transactionId} | Path: {signedPdfPath}");
-
-		using var db = _context.CreateConnection();
-
-		try
-		{
-			await db.ExecuteAsync(
-				"CALL usp_update_esign_signed_pdf_path(@p_transaction_id, @p_signed_pdf_path, @p_updated_at)",
-				new
-				{
-					p_transaction_id = transactionId,
-					p_signed_pdf_path = signedPdfPath,
-					p_updated_at = updatedAt
-				}
-			);
-
-			SafeLogger.App($"[DB] UpdateSignedPdfPath SUCCESS | TransactionId: {transactionId}");
-		}
-		catch (Exception ex)
-		{
-			SafeLogger.Error(ex, $"[DB] UpdateSignedPdfPath FAILED | TransactionId: {transactionId}");
-			throw;
-		}
+		await db.ExecuteAsync(
+			"CALL usp_update_esign_transaction_status(@p_transaction_id, @p_status, @p_completed_at, @p_updated_at, @p_signed_pdf_path)",
+			new
+			{
+				p_transaction_id = transactionId,
+				p_status = status,
+				p_completed_at = completedAt,
+				p_updated_at = updatedAt,
+				p_signed_pdf_path = signedPdfPath   // null if no PDF in webhook
+			}
+		);
 	}
 }

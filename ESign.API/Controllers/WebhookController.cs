@@ -20,7 +20,6 @@ public class WebhookController : ControllerBase
 	[HttpPost("webhook/status")]
 	public async Task<IActionResult> WebhookStatus([FromBody] WebhookRequest request)
 	{
-		// ── Read correlation ID ───────────────────────────────────────────────
 		var correlationId = HttpContext.Items["CorrelationId"]?.ToString() ?? Guid.NewGuid().ToString();
 
 		SafeLogger.App($"[WEBHOOK CONTROLLER] POST /webhook/status received | DocketId: {request.DocketId} | CorrelationId: {correlationId}");
@@ -40,9 +39,7 @@ public class WebhookController : ControllerBase
 		}
 		else
 		{
-			// Dev/test path: no signature header → allow through (Postman test scenario)
-			// In production you would reject here:
-			// return Unauthorized(ResponseBuilder.WebhookUnauthorized(correlationId));
+			
 			SafeLogger.App($"[WEBHOOK CONTROLLER] No signature header — allowing through (dev/test mode) | CorrelationId: {correlationId}");
 		}
 

@@ -12,10 +12,12 @@ namespace ESign.API.Controllers;
 public class ESignController : ControllerBase
 {
 	private readonly IESignService _eSignService;
+	private readonly IHealthService _healthService;
 
-	public ESignController(IESignService eSignService)
+	public ESignController(IESignService eSignService, IHealthService healthService)
 	{
 		_eSignService = eSignService;
+	    _healthService = healthService;
 	}
 
 	[HttpPost("create")]
@@ -87,4 +89,24 @@ public class ESignController : ControllerBase
 			correlationId: correlationId
 		));
 	}
+
+
+	[HttpGet("health")]
+	public async Task<IActionResult> Health()
+	{
+		SafeLogger.App("[HEALTH CONTROLLER] GET /health");
+		var result = await _healthService.GetHealthAsync();
+		return Ok(result);
+	}
+
+
+	[HttpGet("health/database")]
+	public async Task<IActionResult> DatabaseHealth()
+	{
+		SafeLogger.App("[HEALTH CONTROLLER] GET /health/database");
+		var result = await _healthService.GetHealthReadyAsync();
+		var status = result.GetType().GetProperty("status")?.GetValue(result)?.ToString();
+		return status == "Healthy" ? Ok(result) : StatusCode(503, result);
+	}
+
 }

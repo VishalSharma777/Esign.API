@@ -3,7 +3,6 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using ESign.API.Application.Services.Implementations;
 using ESign.API.Application.Services.Interfaces;
-using ESign.API.Configurations;
 using ESign.API.Infrastructure.Dapper;
 using ESign.API.Infrastructure.Providers.Implementations;
 using ESign.API.Infrastructure.Providers.Interfaces;
@@ -12,11 +11,12 @@ using ESign.API.Infrastructure.Repositories.Interfaces;
 using ESign.API.Infrastructure.Resilience;
 using ESign.API.Middleware;
 using ESign.API.Utilities;
+using ESign.API.Utilities.Configurations;
 
-// ── STEP 1: Configure Serilog before anything else ───────────────────────────
+// ── STEP 1: Configure Serilog before anything else 
 LoggerConfig.ConfigureLogger();
 
-// ── STEP 2: Enable Dapper snake_case → PascalCase column mapping ─────────────
+// ── STEP 2: Enable Dapper snake_case → PascalCase column mapping 
 DefaultTypeMap.MatchNamesWithUnderscores = true;
 
 try
@@ -45,13 +45,10 @@ try
 	// ── STEP 7: Infrastructure — Dapper + Encryption ─────────────────────────
 	builder.Services.AddSingleton<DapperContext>();
 	builder.Services.AddSingleton<EncryptionService>();
-	builder.Services.AddSingleton<PiiEncryptionService>();
+
 
 	// ── STEP 8: HTTP clients ──────────────────────────────────────────────────
 
-	// ADD this — separate named client for MockProvider
-	// MockProvider uses this client (pointing at localhost:5001 which is dead)
-	// Polly fires on the HttpClient failures, not on C# exceptions
 	builder.Services.AddHttpClient("MockProviderClient")
 		.AddPolicyHandler(PollyPolicies.GetRetryPolicy("MockProvider"))        // retries 2x
 		.AddPolicyHandler(PollyPolicies.GetCircuitBreakerPolicy("MockProvider")); // breaks after 3 fails

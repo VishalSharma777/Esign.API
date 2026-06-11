@@ -4,8 +4,10 @@ using ESign.API.Infrastructure.Entities;
 using ESign.API.Infrastructure.Logging;
 using ESign.API.Infrastructure.Repositories.Interfaces;
 using ESign.API.Utilities;
+using Newtonsoft.Json;
 
 namespace ESign.API.Infrastructure.Repositories.Implementations;
+
 
 public class ESignSignerRepository : IESignSignerRepository
 {
@@ -18,15 +20,17 @@ public class ESignSignerRepository : IESignSignerRepository
 		_encryption = encryption;
 	}
 
+	// ── Private PII helpers ───────────────────────────────────────────────────
 
-	private string Encrypt(string plainText) => _encryption.Encrypt(plainText);
+	private string Encrypt(string plainText)
+		=> _encryption.Encrypt(plainText);
 
 	private string? EncryptOptional(string? plainText)
 		=> string.IsNullOrEmpty(plainText) ? plainText : _encryption.Encrypt(plainText);
 
-	private string Decrypt(string cipherText) => _encryption.Decrypt(cipherText);
+	private string Decrypt(string cipherText)
+		=> _encryption.Decrypt(cipherText);
 
-	// Decrypt an optional PII field — returns null as-is
 	private string? DecryptOptional(string? cipherText)
 		=> string.IsNullOrEmpty(cipherText) ? cipherText : _encryption.Decrypt(cipherText);
 
@@ -34,6 +38,11 @@ public class ESignSignerRepository : IESignSignerRepository
 	public async Task InsertSigner(ESignSigner signer)
 	{
 		SafeLogger.App($"[DB] InsertSigner START | SignerRefId: {signer.SignerRefId}");
+
+		
+		var positionJson = string.IsNullOrEmpty(signer.SignaturePosition)
+			? null
+			: signer.SignaturePosition;
 
 		var sql = @"CALL usp_insert_esign_signer(
             @TransactionId,
@@ -45,8 +54,7 @@ public class ESignSignerRepository : IESignSignerRepository
             @SignerStatus,
             @InvitationLink,
             @PageNumber,
-            @PositionX,
-            @PositionY,
+            @SignaturePosition::jsonb,
             @CreatedAt
         );";
 
@@ -57,16 +65,15 @@ public class ESignSignerRepository : IESignSignerRepository
 			await db.ExecuteAsync(sql, new
 			{
 				signer.TransactionId,
-				signer.SignerRefId,             
-				signer.SignerId,                 
-				SignerName = Encrypt(signer.SignerName),           
-				SignerEmail = EncryptOptional(signer.SignerEmail),    
-				SignerMobile = Encrypt(signer.SignerMobile),          
-				signer.SignerStatus,             
-				InvitationLink = EncryptOptional(signer.InvitationLink), 
+				signer.SignerRefId,                              // not PII
+				signer.SignerId,                                 // not PII
+				SignerName = Encrypt(signer.SignerName),     // PII — encrypted
+				SignerEmail = EncryptOptional(signer.SignerEmail),  // PII — encrypted
+				SignerMobile = Encrypt(signer.SignerMobile),   // PII — encrypted
+				signer.SignerStatus,                             // not PII
+				InvitationLink = EncryptOptional(signer.InvitationLink), // PII — encrypted
 				signer.PageNumber,
-				signer.PositionX,
-				signer.PositionY,
+				SignaturePosition = positionJson,                // JSONB — not PII, plain JSON
 				signer.CreatedAt
 			});
 
@@ -80,6 +87,8 @@ public class ESignSignerRepository : IESignSignerRepository
 	}
 
 	// ── GetSignersByTransactionId ─────────────────────────────────────────────
+	// Reads encrypted PII rows from DB, decrypts them before returning.
+	// signature_position comes back as a JSON string from JSONB column — no decryption needed.
 	public async Task<List<ESignSigner>> GetSignersByTransactionId(long transactionId)
 	{
 		SafeLogger.App($"[DB] GetSignersByTransactionId START | TransactionId: {transactionId}");
@@ -93,10 +102,10 @@ public class ESignSignerRepository : IESignSignerRepository
 				new { p_transaction_id = transactionId }
 			)).ToList();
 
-			// Decrypt PII fields on every row before returning to the caller
-			// The rest of the app (WebhookService etc.) always sees plain text
+			// Decrypt PII fields, leave signature_position as-is (plain JSONB string)
 			var decrypted = rows.Select(s => new ESignSigner
 			{
+				// Non-PII fields — copy as-is
 				Id = s.Id,
 				TransactionId = s.TransactionId,
 				SignerRefId = s.SignerRefId,
@@ -104,11 +113,11 @@ public class ESignSignerRepository : IESignSignerRepository
 				SignerStatus = s.SignerStatus,
 				SignedAt = s.SignedAt,
 				PageNumber = s.PageNumber,
-				PositionX = s.PositionX,
-				PositionY = s.PositionY,
+				SignaturePosition = s.SignaturePosition,  // plain JSONB string — no decryption
 				CreatedAt = s.CreatedAt,
 				UpdatedAt = s.UpdatedAt,
 
+				// PII fields — decrypt after reading
 				SignerName = Decrypt(s.SignerName),
 				SignerEmail = DecryptOptional(s.SignerEmail),
 				SignerMobile = Decrypt(s.SignerMobile),
@@ -126,7 +135,8 @@ public class ESignSignerRepository : IESignSignerRepository
 		}
 	}
 
-	// ── UpdateSignerStatus 
+	// ── UpdateSignerStatus ────────────────────────────────────────────────────
+	// No PII and no position changes here — only status + timestamps updated
 	public async Task UpdateSignerStatus(
 		string signerRefId, string status, DateTime signedAt, DateTime updatedAt)
 	{

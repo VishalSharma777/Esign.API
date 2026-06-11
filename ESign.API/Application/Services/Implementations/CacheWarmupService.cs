@@ -4,42 +4,44 @@ using ESign.API.Application.Services.Interfaces;
 using ESign.API.Infrastructure.Logging;
 using ESign.API.Infrastructure.Repositories.Interfaces;
 
-namespace ESign.API.Application.Services.Implementations;
-
-
-public class CacheWarmupService : IHostedService
+namespace ESign.API.Application.Services.Implementations
 {
-	
-	private readonly IServiceScopeFactory _scopeFactory;
 
-	public CacheWarmupService(IServiceScopeFactory scopeFactory)
+
+	public class CacheWarmupService : IHostedService
 	{
-		_scopeFactory = scopeFactory;
-	}
 
-	
-	public async Task StartAsync(CancellationToken cancellationToken)
-	{
-		SafeLogger.App("[CACHE WARMUP] Starting provider cache warmup");
+		private readonly IServiceScopeFactory _scopeFactory;
 
-		
-		using var scope = _scopeFactory.CreateScope();
+		public CacheWarmupService(IServiceScopeFactory scopeFactory)
+		{
+			_scopeFactory = scopeFactory;
+		}
 
-		
-		var masterRepo = scope.ServiceProvider.GetRequiredService<IESignMasterRepository>();
-		var cacheService = scope.ServiceProvider.GetRequiredService<IESignCacheService>();
 
-		var providers = await masterRepo.GetAllActiveProviders();
+		public async Task StartAsync(CancellationToken cancellationToken)
+		{
+			SafeLogger.App("[CACHE WARMUP] Starting provider cache warmup");
 
-		cacheService.SetProviders(providers);
 
-		SafeLogger.App($"[CACHE WARMUP] Done — {providers.Count} providers loaded into cache");
-	}
+			using var scope = _scopeFactory.CreateScope();
 
-	// StopAsync — called when app shuts down, nothing to clean up for cache warmup
-	public Task StopAsync(CancellationToken cancellationToken)
-	{
-		SafeLogger.App("[CACHE WARMUP] Stopped");
-		return Task.CompletedTask;
+
+			var masterRepo = scope.ServiceProvider.GetRequiredService<IESignMasterRepository>();
+			var cacheService = scope.ServiceProvider.GetRequiredService<IESignCacheService>();
+
+			var providers = await masterRepo.GetAllActiveProviders();
+
+			cacheService.SetProviders(providers);
+
+			SafeLogger.App($"[CACHE WARMUP] Done — {providers.Count} providers loaded into cache");
+		}
+
+		// StopAsync — called when app shuts down, nothing to clean up for cache warmup
+		public Task StopAsync(CancellationToken cancellationToken)
+		{
+			SafeLogger.App("[CACHE WARMUP] Stopped");
+			return Task.CompletedTask;
+		}
 	}
 }

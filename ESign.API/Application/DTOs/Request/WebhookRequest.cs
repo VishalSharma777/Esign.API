@@ -29,7 +29,6 @@ namespace ESign.API.Application.DTOs.Request
 		public string? WebhookSignature { get; set; }
 	}
 
-	// WebhookSignerInfo — one signer's completion details inside the webhook payload
 	public class WebhookSignerInfo
 	{
 
